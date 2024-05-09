@@ -24,9 +24,9 @@ class Library {
    **/
   static randInt(min, max, inclusive = true) {
     if (inclusive)
-      return Math.floor(Math.random() * (max - min + 1) ) + min;  // included
+      return Math.floor(Math.random() * (max - min + 1)) + min;  // included
     else
-      return Math.floor(Math.random() * (max - min - 1) ) + min + 1;  // not included
+      return Math.floor(Math.random() * (max - min - 1)) + min + 1;  // not included
   }
 
   /**
@@ -57,7 +57,7 @@ class Library {
 
     return Math.round((value + Number.EPSILON) * multiplier) / multiplier;
   }
-  
+
   /**
    * Return a random Latin letter character from the alphabet.
    * @param {any}  letterCase  Random casing if 0 or 'mixed'. Uppercase if 1 or 'upper'. Lowercase if 2 or 'lower'). Defaults to 0 (random).
@@ -68,7 +68,7 @@ class Library {
     if (letterCase == "upper") letterCase = 1;
     if (letterCase == "lower") letterCase = 2;
     if (letterCase != 0 && letterCase != 1 && letterCase != 2) return -1;
-    
+
     if (letterCase == 0) letterCase = this.randInt(1, 2);
     let char = String.fromCharCode(this.randInt(65, 90));
     return (letterCase == 1) ? char.toUpperCase() : char.toLowerCase();
@@ -121,16 +121,16 @@ class Library {
 
     // Check that the parameters are valid
     // if (!inclusive && ((max-min) - 1 < length)) return array;
-    if (!allowDuplicates && ((max-min) + 1 < length)) return array;
-    if (!allowDuplicates && !inclusive && ((max-min) - 1 < length)) return array;
+    if (!allowDuplicates && ((max - min) + 1 < length)) return array;
+    if (!allowDuplicates && !inclusive && ((max - min) - 1 < length)) return array;
 
     for (let x = 0; x < length; x++) {
-    
+
       rnd = this.randInt(min, max, inclusive);
-    
+
       if (!allowDuplicates) {
         // Duplicates aren't allowed, so keep generating
-        while(array.includes(rnd)) {
+        while (array.includes(rnd)) {
           rnd = this.randInt(min, max, inclusive);
         }
       }
@@ -171,10 +171,10 @@ class Library {
     if (!target) return -1;
 
     // Create an array of random strings
-    let retArray = this.arrayOfStrings(length, target.length, 0);  
+    let retArray = this.arrayOfStrings(length, target.length, 0);
     // Insert the target
-    retArray[this.randInt(0, length-1)] = target;
-    
+    retArray[this.randInt(0, length - 1)] = target;
+
     // Sort and return (should we?)
     return retArray.sort();
   }
@@ -191,14 +191,14 @@ class Library {
   static hideInt(length, min, max, target) {
     if (length < 5) return -1;
     if (isNaN(target)) return -1;
-    
+
     // Array of ints with no duplicates
     let retArray = this.arrayOfInts(length, min, max, true, false);
-    
+
     // Check if the target already exists and insert, if not
     if (!retArray.includes(target))
-      retArray[this.randInt(0, length-1)] = target;
-    
+      retArray[this.randInt(0, length - 1)] = target;
+
     // Sort and return (should we sort?)
     return retArray.sort((a, b) => (a - b));
   }
@@ -207,33 +207,43 @@ class Library {
    * @param {number} length - The size of the array
    * @returns {Array} The descending order array of integers
    */
- static worstCase(length) {
-  let output = [];
-  for (let i = length; i > 0; i--) {
-    output.push(i);
-    // Should I add a duplicate?
-    if ((i > 1) && (Math.round(Math.random()) == 0)) {
+  static worstCase(length) {
+    let output = [];
+    for (let i = length; i > 0; i--) {
       output.push(i);
-      i--;
-    } 
-  }
+      // Should I add a duplicate?
+      if ((i > 1) && (Math.round(Math.random()) == 0)) {
+        output.push(i);
+        i--;
+      }
+    }
     return output;
   }
 
   /** Return a sorted array of integers from min to max.
+   * @param {Number} n - The number of elements to put in the array
    * @param {Number} min - The starting integer value
    * @param {Number} max - The largest (ending) integer value
-   * @param {Number} n - The number of elements to put in the array
+   * @param {Boolean} duplicates - Whether to permit duplicate values or not, defaults to false
    * @returns {Array} The sorted array of integers */
-  static sortedArrayOfInts(min, max, n) {
-    let array = [];
-    for (let i = 0; i <= n; i++) 
-      array.push(this.randInt(min, max, true));
-  
-    array.sort(function(a, b){return a - b});
+  static sortedArrayOfInts(n, min, max, duplicates = false) {
+    let array = this.arrayOfInts(n, min, max, true, duplicates)
+
+    array.sort(function (a, b) { return a - b });
     return array;
   }
-  
+
+  /** Return a sorted array of integers from min to max.
+   * @param {number} min - The starting integer value
+   * @param {number} max - The largest (ending) integer value
+   * @returns The sorted array of integers */
+  static straightArrayOfInts(min, max) {
+    let array = [];
+    for (let i = min; i <= max; i++)
+      array.push(i);
+    return array;
+  }
+
   /** Return the index of the target inside array "list"
    * @param {Array} list - The sorted array of elements to search
    * @param {Number or String} target - The element being sought
