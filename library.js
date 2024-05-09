@@ -219,6 +219,30 @@ class Library {
   }
     return output;
   }
+
+  /** Return a sorted array of integers from min to max.
+   * @param {Number} min - The starting integer value
+   * @param {Number} max - The largest (ending) integer value
+   * @param {Number} n - The number of elements to put in the array
+   * @returns {Array} The sorted array of integers */
+  static sortedArrayOfInts(min, max, n) {
+    let array = [];
+    for (let i = 0; i <= n; i++) 
+      array.push(this.randInt(min, max, true));
+  
+    array.sort(function(a, b){return a - b});
+    return array;
+  }
+  
+  /** Return the index of the target inside array "list"
+   * @param {Array} list - The sorted array of elements to search
+   * @param {Number or String} target - The element being sought
+   * @returns {Number} The index of the target element or -1 */
+  static linearSearch(list, target) {
+    for (let i = 0; i < list.length; i++)
+      if (target == list[i]) return i;
+    return -1;
+  }
 }
 
 module.exports = Library;
